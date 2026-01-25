@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unofficial RTX HDR Calculator</title>
+    <style>
+        :root {
+            /* Theme colors - Dark mode with green accents */
+            --bg-color: #121212;
+            --card-bg: #1f1f1f;
+            --input-bg: #2d2d2d;
+            --text-main: #ffffff;
+            --text-sub: #a0a0a0;
+            --accent-color: #76b900; 
+            --accent-hover: #8cd600;
+            --border-radius: 8px;
+            --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-stack);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+        }
+
+        /* HEADER */
+        .header {
+            margin-bottom: 24px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 16px;
+            text-align: center; 
+        }
+
+        .header h1 {
+            font-size: 26px;
+            font-weight: 700;
+            margin: 0 0 8px 0;
+            color: var(--text-main);
+        }
+
+        .header-sub {
+            font-size: 13px;
+            color: var(--text-sub);
+            font-weight: 400;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 24px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            border: 1px solid #333;
+            margin-bottom: 20px; /* Space between cards */
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-sub);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            border-left: 3px solid var(--accent-color);
+            padding-left: 10px;
+        }
+
+        .input-group {
+            margin-bottom: 24px;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 15px;
+            color: var(--text-main);
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .input-desc {
+            font-size: 13px;
+            color: var(--text-sub);
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        input[type="number"], select {
+            width: 100%;
+            background-color: var(--input-bg);
+            border: 1px solid #444;
+            color: white;
+            padding: 14px;
+            border-radius: 6px;
+            font-size: 15px;
+            font-family: var(--font-stack);
+            box-sizing: border-box;
+            transition: all 0.2s;
+        }
+
+        input[type="number"]:focus, select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            background-color: #363636;
+        }
+
+        /* Result styling */
+        .results-container {
+            margin-top: 30px;
+            border-top: 1px solid #333;
+            padding-top: 20px;
+            opacity: 0.4; 
+            pointer-events: none;
+            transition: opacity 0.3s ease-in-out;
+        }
+        
+        .results-container.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid #2d2d2d;
+        }
+
+        .result-row:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .result-value {
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 18px;
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        .note-box {
+            background: rgba(118, 185, 0, 0.1);
+            border: 1px solid rgba(118, 185, 0, 0.3);
+            border-radius: 4px;
+            padding: 12px;
+            margin-top: 10px;
+            font-size: 13px;
+            color: #ddd;
+            display: none;
+            line-height: 1.4;
+        }
+        
+        /* TIPS LIST STYLING */
+        .tips-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .tips-list li {
+            margin-bottom: 12px;
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--text-sub);
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .tips-list li::before {
+            content: "•";
+            color: var(--accent-color);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            font-size: 16px;
+            line-height: 1;
+        }
+        
+        .tips-list strong {
+            color: var(--text-main);
+        }
+        
+        .tips-list code {
+            background: #333;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Consolas', monospace;
+            font-size: 12px;
+            color: #fff;
+        }
+
+        /* FOOTER DISCLAIMER */
+        .disclaimer {
+            font-size: 11px;
+            color: #666;
+            margin-top: 30px;
+            text-align: center;
+            line-height: 1.5;
+            padding-top: 20px;
+            border-top: 1px solid #222;
+        }
+        
+        .version-tag {
+            display: inline-block;
+            background: #222;
+            color: #888;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-top: 8px;
+            font-size: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <div class="header">
+            <h1>Unofficial RTX HDR Calculator</h1>
+            <div class="header-sub">
+                A community tool for calibrating HDR video settings. Not affiliated with NVIDIA.
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-title">Display Parameters</div>
+
+            <div class="input-group">
+                <label class="input-label" for="peakBrightness">Peak Brightness (nits)</label>
+                <div class="input-desc">Enter the maximum brightness of your monitor (e.g., 400, 1000, 2500).</div>
+                <input type="number" id="peakBrightness" placeholder="e.g. 1000" min="100" max="10000">
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label" for="calcMode">Calculation Mode</label>
+                <div class="input-desc">Choose how the tool scales brightness for white elements (UI/Text).</div>
+                <select id="calcMode" onchange="toggleNote()">
+                    <option value="reference" selected>Standard (Balanced for dark/dim rooms)</option>
+                    <option value="uncapped">Uncapped (Brighter UI for bright rooms)</option>
+                </select>
+                <div id="uncappedNote" class="note-box">
+                    <strong>Note:</strong> Uncapped mode scales paper white linearly beyond 203 nits. This provides a brighter image in sunlit rooms but deviates from the reference standard and may cause eye strain with text.
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label" for="gammaCurve">Target Gamma</label>
+                <div class="input-desc">Select your preferred shadow depth.</div>
+                <select id="gammaCurve">
+                    <option value="2.0">Gamma 2.0 (Brighter Shadows)</option>
+                    <option value="2.2" selected>Gamma 2.2 (Standard)</option>
+                    <option value="2.4">Gamma 2.4 (Darker Shadows)</option>
+                </select>
+            </div>
+
+            <div class="results-container" id="resultsArea">
+                <div class="section-title">Recommended Settings</div>
+
+                <div class="result-row">
+                    <span class="result-label">Peak Brightness</span>
+                    <span class="result-value" id="outPeak">--</span>
+                </div>
+
+                <div class="result-row">
+                    <span class="result-label">Middle Grey</span>
+                    <span class="result-value" id="outMidGrey">--</span>
+                </div>
+                
+                <div class="result-row">
+                    <span class="result-label">Contrast</span>
+                    <span class="result-value" id="outContrast">--</span>
+                </div>
+
+                <div class="result-row">
+                    <span class="result-label">Saturation</span>
+                    <span class="result-value" id="outSaturation">-25</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-title">Windows 11 Setup Tips</div>
+            <ul class="tips-list">
+                <li><strong>Disable Auto HDR:</strong> Prevent double-tone-mapping by turning this off.<br>
+                    <em>Settings > System > Display > HDR > Auto HDR [OFF]</em>
+                </li>
+                <li><strong>Disable ACM:</strong> Ensure "Automatic Color Management" is off to avoid conflict.<br>
+                    <em>Settings > System > Display > Advanced Display > Automatically manage color [OFF]</em>
+                </li>
+                <li><strong>Windows SDR Slider:</strong> This slider does NOT affect RTX HDR brightness. It only affects the desktop/UI background.</li>
+                <li><strong>Apply In-Game:</strong> Use the overlay while the game is running to apply these values.<br>
+                    <em>Press <code>Alt+Z</code> > Game Filter > RTX HDR</em>
+                </li>
+            </ul>
+        </div>
+
+        <div class="disclaimer">
+            <strong>Disclaimer:</strong> This is an open-source, fan-made project.<br>
+            "NVIDIA", "GeForce", "RTX", and the NVIDIA logo are trademarks and/or registered trademarks of NVIDIA Corporation.<br>
+            This tool is not endorsed by or affiliated with NVIDIA Corporation.<br>
+            Calculations are based on ITU-R BT.2408-8 (11/2024) standards.<br>
+            <span class="version-tag">v1.0.0</span>
+        </div>
+    </div>
+
+    <script>
+        function toggleNote() {
+            const mode = document.getElementById('calcMode').value;
+            const note = document.getElementById('uncappedNote');
+            note.style.display = (mode === 'uncapped') ? 'block' : 'none';
+            calculateSettings();
+        }
+
+        function calculateSettings() {
+            const peakBrightness = parseFloat(document.getElementById('peakBrightness').value);
+            const gamma = parseFloat(document.getElementById('gammaCurve').value);
+            const mode = document.getElementById('calcMode').value;
+
+            if (isNaN(peakBrightness) || peakBrightness <= 0) {
+                document.getElementById('outPeak').innerText = "--";
+                document.getElementById('outMidGrey').innerText = "--";
+                document.getElementById('outContrast').innerText = "--";
+                document.getElementById('outSaturation').innerText = "-25 %";
+                document.getElementById('resultsArea').classList.remove('active');
+                return;
+            }
+
+            // Logic: ITU BT.2408 Standard
+            let paperWhite;
+            
+            if (mode === 'reference') {
+                if (peakBrightness >= 1000) {
+                    paperWhite = 203;
+                } else if (peakBrightness <= 400) {
+                    paperWhite = 100;
+                } else {
+                    const slope = (203 - 100) / (1000 - 400); 
+                    paperWhite = 100 + ((peakBrightness - 400) * slope);
+                }
+            } else {
+                const slope = (203 - 100) / (1000 - 400); 
+                if (peakBrightness <= 400) {
+                    paperWhite = 100;
+                } else {
+                    paperWhite = 100 + ((peakBrightness - 400) * slope);
+                }
+            }
+
+            const middleGrey = paperWhite * Math.pow(0.5, gamma);
+            
+            let contrast = 25; 
+            if (gamma === 2.0) contrast = 0;
+            if (gamma === 2.2) contrast = 25;
+            if (gamma === 2.4) contrast = 50;
+
+            const saturation = -25;
+
+            document.getElementById('outPeak').innerText = peakBrightness + " nits";
+            document.getElementById('outMidGrey').innerText = Math.round(middleGrey); 
+            document.getElementById('outContrast').innerText = contrast + " %";
+            document.getElementById('outSaturation').innerText = saturation + " %";
+            
+            document.getElementById('resultsArea').classList.add('active');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const peakInput = document.getElementById('peakBrightness');
+            const modeSelect = document.getElementById('calcMode');
+            const gammaSelect = document.getElementById('gammaCurve');
+
+            peakInput.addEventListener('input', calculateSettings);
+            modeSelect.addEventListener('change', calculateSettings);
+            gammaSelect.addEventListener('change', calculateSettings);
+
+            calculateSettings();
+        });
+    </script>
+</body>
+</html>
