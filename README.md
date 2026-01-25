@@ -38,6 +38,10 @@ This tool was built based on the research and mathematical analysis provided by 
 * **Original Research:** [RTX HDR Paper White & Gamma Reference Settings](https://www.reddit.com/r/nvidia/comments/1b03yfg/rtx_hdr_paper_white_gamma_reference_settings/) by **u/defet_** on r/nvidia.
 * **Standards:** Calculations align with **Report ITU-R BT.2408-8 (11/2024)** regarding HDR reference white levels.
 
+## 🤖 AI-Generated Content Notice
+
+This website and calculator were built with the assistance of AI tools. While efforts have been made to ensure accuracy, **please verify calculations and settings independently** before applying them to your RTX HDR settings. The mathematical formulas used are based on industry standards, but edge cases or unusual display configurations may produce unexpected results.
+
 ## ⚖️ Legal Disclaimer
 
 **Unofficial Project.** This software is a fan-made tool and is **not** affiliated with, endorsed by, or connected to NVIDIA Corporation.
