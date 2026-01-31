@@ -2,7 +2,7 @@
 
 A simple, open-source web tool to calculate the optimal **Middle Grey** (Paper White) and **Contrast** settings for the NVIDIA RTX HDR overlay based on your monitor's peak brightness.
 
-**Live Demo:** *(Not published yet)*
+**Live Demo** https://wootehfook.github.io/unofficial-rtx-hdr-calculator/
 
 ## 🎯 Purpose
 
