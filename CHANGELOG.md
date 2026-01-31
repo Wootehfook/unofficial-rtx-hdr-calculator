@@ -2,6 +2,12 @@
 
 All notable changes to the **Unofficial RTX HDR Calculator** project will be documented in this file.
 
+## [v1.4.3] - 2026-01-31
+### Added
+- **Support Link:** Added a Ko-fi “Buy me a coffee” link in the footer and README for optional support.
+### Changed
+- **Footer Layout:** Sources section now uses a centered, wrap-friendly layout that prevents mid-link word breaks.
+
 ## [v1.4.2] - 2026-01-30
 ### Added
 - **Source Documentation:** Added direct PDF links to ITU-R BT.2100-3 (02/2025) alongside existing BT.2408-8 reference.
