@@ -299,18 +299,27 @@
         .sources {
             font-size: 11px;
             color: #777;
-            text-align: center;
             margin-top: 14px;
             line-height: 1.5;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 4px 8px;
+            text-align: center;
         }
 
         .sources a {
             color: #9aa0a6;
             text-decoration: none;
+            white-space: nowrap;
         }
 
         .sources a:hover {
             text-decoration: underline;
+        }
+
+        .sources .sep {
+            color: #777;
         }
         
         .version-tag {
@@ -471,15 +480,19 @@
 
         <div class="sources">
             <strong>Sources:</strong>
-            <a href="https://www.reddit.com/r/nvidia/comments/1b03yfg/rtx_hdr_paper_white_gamma_reference_settings/" target="_blank" rel="noopener noreferrer">RTX HDR Paper White &amp; Gamma Reference Settings</a>
-            (u/defet_, r/nvidia) ·
+            <span>
+                <a href="https://www.reddit.com/r/nvidia/comments/1b03yfg/rtx_hdr_paper_white_gamma_reference_settings/" target="_blank" rel="noopener noreferrer">RTX HDR Paper White &amp; Gamma Reference Settings</a>
+                <span class="sep">(u/defet_, r/nvidia)</span>
+            </span>
+            <span class="sep">·</span>
             <a href="https://www.itu.int/dms_pub/itu-r/opb/rep/R-REP-BT.2408-8-2024-PDF-E.pdf" target="_blank" rel="noopener noreferrer">ITU-R BT.2408-8 (PDF)</a>
-            ·
+            <span class="sep">·</span>
             <a href="https://www.itu.int/dms_pubrec/itu-r/rec/bt/R-REC-BT.2100-3-202502-I!!PDF-E.pdf" target="_blank" rel="noopener noreferrer">ITU-R BT.2100-3 (PDF)</a>
-            <br>
-            <a href="https://github.com/Wootehfook/unofficial-rtx-hdr-calculator" target="_blank" rel="noopener noreferrer" style="margin-top: 8px; display: inline-block; color: #9aa0a6; text-decoration: none;">View on GitHub</a>
+            <span class="sep">·</span>
+            <a href="https://github.com/Wootehfook/unofficial-rtx-hdr-calculator" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+            <span class="sep">·</span>
+            <a href="https://ko-fi.com/wtfook" target="_blank" rel="noopener noreferrer">Buy me a coffee</a>
         </div>
-
         <div class="disclaimer">
             <strong>Disclaimer:</strong> This is an open-source, fan-made project.<br>
             "NVIDIA", "GeForce", "RTX", and the NVIDIA logo are trademarks and/or registered trademarks of NVIDIA Corporation.<br>
@@ -611,5 +624,6 @@
             calculateSettings();
         });
     </script>
+
 </body>
 </html>
