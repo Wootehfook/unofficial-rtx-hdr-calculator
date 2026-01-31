@@ -2,7 +2,7 @@
 
 A simple, open-source web tool to calculate the optimal **Middle Grey** (Paper White) and **Contrast** settings for the NVIDIA RTX HDR overlay based on your monitor's peak brightness.
 
-**Live Demo** *(Add your GitHub Pages link here once published)*
+**Live Demo:** *(Not published yet)*
 
 ## 🎯 Purpose
 
@@ -10,8 +10,10 @@ NVIDIA's RTX HDR filter uses specific sliders (Middle Grey, Contrast, Saturation
 
 ## ✨ Features
 
-* **Reference Mode:** Caps Paper White at 203 nits (per ITU standards) to maximize dynamic range on high-end displays.
-* **Uncapped Mode:** A "bright room" mode that scales brightness linearly for easier viewing in sunlit environments.
+* **Calibration Style:** Choose **Cinema / Reference (BT.2408)** or **Vivid / Daylight (BT.2100 HLG)** based on room lighting.
+* **Target Gamma:** Pick Gamma 2.0, 2.2, or 2.4 for your preferred shadow depth.
+* **Game Overlay Settings:** Outputs Peak Brightness, Middle Grey, Contrast, and Saturation values.
+* **Profile Inspector (HEX):** Shows 32-bit values for NVIDIA Profile Inspector entry.
 * **Live Updates:** Real-time calculation as you type or adjust settings.
 * **Windows 11 Guide:** Includes critical setup tips for Windows 11 (25H2) to prevent double-tone-mapping conflicts.
 * **Privacy Focused:** Runs 100% client-side. No user data is stored or transmitted.
@@ -20,8 +22,8 @@ NVIDIA's RTX HDR filter uses specific sliders (Middle Grey, Contrast, Saturation
 
 1. Download `index.html` or visit the live demo.
 2. Enter your monitor's **Peak Brightness** (e.g., 1000 nits).
-3. Select your calculation mode (Reference vs. Uncapped).
-4.Copy the resulting values into the NVIDIA App Overlay (`Alt+Z` -> Game Filter -> RTX HDR).
+3. Select your **Calibration Style** and **Target Gamma**.
+4. Copy the resulting values into the NVIDIA App Overlay (`Alt+Z` -> Game Filter -> RTX HDR).
 
 ## ⚠️ Important: Windows 11 Configuration
 
@@ -31,12 +33,14 @@ To ensure RTX HDR works correctly without a "washed out" look, you must prevent 
 * **Disable ACM:** `Settings > System > Display > Advanced Display > Automatically manage color [OFF]`
 * **Note:** The Windows "SDR Content Brightness" slider **does not** affect RTX HDR. If it does, RTX HDR is not active.
 
-## 👏 Credits & Attribution
+## 📚 Sources
 
-This tool was built based on the research and mathematical analysis provided by the community.
+This project is based on community research and established standards. Sources are linked below for transparency and verification.
 
-* **Original Research:** [RTX HDR Paper White & Gamma Reference Settings](https://www.reddit.com/r/nvidia/comments/1b03yfg/rtx_hdr_paper_white_gamma_reference_settings/) by **u/defet_** on r/nvidia.
-* **Standards:** Calculations align with **Report ITU-R BT.2408-8 (11/2024)** regarding HDR reference white levels.
+* **Community Research:** [RTX HDR Paper White & Gamma Reference Settings](https://www.reddit.com/r/nvidia/comments/1b03yfg/rtx_hdr_paper_white_gamma_reference_settings/) by **u/defet_** (r/nvidia).
+* **Standards:** 
+  * [Report ITU-R BT.2408-8 (11/2024): Guidance for operational practices in HDR television production](https://www.itu.int/dms_pub/itu-r/opb/rep/R-REP-BT.2408-8-2024-PDF-E.pdf) — Determines the "Reference" Paper White level (203 nits) and interpolation logic for lower brightness displays (Cinema mode).
+  * [Recommendation ITU-R BT.2100-3 (02/2025): Image parameter values for high dynamic range television for use in production and international programme exchange](https://www.itu.int/dms_pubrec/itu-r/rec/bt/R-REC-BT.2100-3-202502-I!!PDF-E.pdf) — Contains the HLG System Gamma formula (Table 5, Note 2) which scales brightness based on display peak luminance (Vivid mode). *(Note: If unavailable in your region, the previous standard BT.2100-2 (2018) contains the identical gamma formula.)*
 
 ## 🤖 AI-Generated Content Notice
 
