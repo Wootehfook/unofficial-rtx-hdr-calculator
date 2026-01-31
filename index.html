@@ -6,7 +6,6 @@
     <title>Unofficial RTX HDR Calculator</title>
     <style>
         :root {
-            /* Theme colors - Dark mode with green accents */
             --bg-color: #121212;
             --card-bg: #1f1f1f;
             --input-bg: #2d2d2d;
@@ -16,6 +15,7 @@
             --accent-hover: #8cd600;
             --border-radius: 8px;
             --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --mono-font: 'Consolas', 'Monaco', monospace;
         }
 
         body {
@@ -36,7 +36,6 @@
             padding: 20px;
         }
 
-        /* HEADER */
         .header {
             margin-bottom: 24px;
             border-bottom: 1px solid #333;
@@ -63,7 +62,7 @@
             padding: 24px;
             box-shadow: 0 8px 16px rgba(0,0,0,0.3);
             border: 1px solid #333;
-            margin-bottom: 20px; /* Space between cards */
+            margin-bottom: 20px;
         }
 
         .section-title {
@@ -115,7 +114,6 @@
             background-color: #363636;
         }
 
-        /* Result styling */
         .results-container {
             margin-top: 30px;
             border-top: 1px solid #333;
@@ -148,10 +146,18 @@
         }
 
         .result-value {
-            font-family: 'Consolas', 'Monaco', monospace;
+            font-family: var(--mono-font);
             font-size: 18px;
             color: var(--accent-color);
             font-weight: bold;
+        }
+        
+        .result-sub {
+            display: block;
+            font-size: 11px;
+            color: #666;
+            margin-top: 2px;
+            font-weight: normal;
         }
 
         .note-box {
@@ -165,8 +171,86 @@
             display: none;
             line-height: 1.4;
         }
+
+        /* NPI CARD STYLING */
+        .npi-card {
+            background-color: #151515; 
+            border: 1px dashed #444;
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 25px;
+        }
+
+        .npi-header {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #777;
+            font-weight: bold;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .npi-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            font-family: var(--mono-font);
+            font-size: 13px;
+            border-bottom: 1px solid #222;
+        }
+
+        .npi-row:last-child {
+            border-bottom: none;
+        }
         
-        /* TIPS LIST STYLING */
+        .npi-label-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .npi-id {
+            font-size: 10px;
+            color: #555;
+            margin-top: 2px;
+        }
+        
+        .npi-val-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .npi-val { color: #8cd600; }
+        .npi-label { color: #aaa; font-weight: 500; }
+
+        /* COPY BUTTON STYLES */
+        .copy-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .copy-btn svg {
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
+        }
+
         .tips-list {
             list-style: none;
             padding: 0;
@@ -192,20 +276,16 @@
             line-height: 1;
         }
         
-        .tips-list strong {
-            color: var(--text-main);
-        }
-        
+        .tips-list strong { color: var(--text-main); }
         .tips-list code {
             background: #333;
             padding: 2px 4px;
             border-radius: 3px;
-            font-family: 'Consolas', monospace;
+            font-family: var(--mono-font);
             font-size: 12px;
             color: #fff;
         }
 
-        /* FOOTER DISCLAIMER */
         .disclaimer {
             font-size: 11px;
             color: #666;
@@ -214,6 +294,23 @@
             line-height: 1.5;
             padding-top: 20px;
             border-top: 1px solid #222;
+        }
+
+        .sources {
+            font-size: 11px;
+            color: #777;
+            text-align: center;
+            margin-top: 14px;
+            line-height: 1.5;
+        }
+
+        .sources a {
+            color: #9aa0a6;
+            text-decoration: none;
+        }
+
+        .sources a:hover {
+            text-decoration: underline;
         }
         
         .version-tag {
@@ -245,16 +342,21 @@
                 <div class="input-desc">Enter the maximum brightness of your monitor (e.g., 400, 1000, 2500).</div>
                 <input type="number" id="peakBrightness" placeholder="e.g. 1000" min="100" max="10000">
             </div>
-            
+
             <div class="input-group">
-                <label class="input-label" for="calcMode">Calculation Mode</label>
-                <div class="input-desc">Choose how the tool scales brightness for white elements (UI/Text).</div>
+                <label class="input-label" for="calcMode">Calibration Style</label>
+                <div class="input-desc">Choose the standard based on your room lighting and preference.</div>
                 <select id="calcMode" onchange="toggleNote()">
-                    <option value="reference" selected>Standard (Balanced for dark/dim rooms)</option>
-                    <option value="uncapped">Uncapped (Brighter UI for bright rooms)</option>
+                    <option value="reference" selected>Cinema / Reference (BT.2408)</option>
+                    <option value="hlg">Vivid / Daylight (BT.2100 HLG)</option>
                 </select>
-                <div id="uncappedNote" class="note-box">
-                    <strong>Note:</strong> Uncapped mode scales paper white linearly beyond 203 nits. This provides a brighter image in sunlit rooms but deviates from the reference standard and may cause eye strain with text.
+                
+                <div id="refNote" class="note-box" style="display:block;">
+                    <strong>Cinema (Recommended):</strong> Caps Paper White at 203 nits. Best for dim/dark rooms. Keeps text comfortable while maximizing dynamic range.
+                </div>
+                
+                <div id="hlgNote" class="note-box">
+                    <strong>Vivid:</strong> Scales average brightness up with your monitor's power. Best for bright rooms. Makes the image punchier but may strain eyes.
                 </div>
             </div>
 
@@ -269,7 +371,7 @@
             </div>
 
             <div class="results-container" id="resultsArea">
-                <div class="section-title">Recommended Settings</div>
+                <div class="section-title">Game Overlay Settings</div>
 
                 <div class="result-row">
                     <span class="result-label">Peak Brightness</span>
@@ -277,7 +379,10 @@
                 </div>
 
                 <div class="result-row">
-                    <span class="result-label">Middle Grey</span>
+                    <div>
+                        <span class="result-label">Middle Grey</span>
+                        <span class="result-sub" id="lblMethod">Derived from BT.2408</span>
+                    </div>
                     <span class="result-value" id="outMidGrey">--</span>
                 </div>
                 
@@ -290,60 +395,171 @@
                     <span class="result-label">Saturation</span>
                     <span class="result-value" id="outSaturation">-25</span>
                 </div>
+
+                <div class="npi-card">
+                    <div class="npi-header">
+                        <span>Profile Inspector (HEX)</span>
+                        <span style="font-size: 10px; font-weight: normal; opacity: 0.6;">32-BIT UNSIGNED</span>
+                    </div>
+                    
+                    <div class="npi-row">
+                        <div class="npi-label-group">
+                            <span class="npi-label">TrueHDR - Peak Brightness</span>
+                            <span class="npi-id">0x10D17E79</span>
+                        </div>
+                        <div class="npi-val-container">
+                            <span class="npi-val" id="hexPeak">0x00000000</span>
+                            <button class="copy-btn" onclick="copyVal('hexPeak', this)" title="Copy to clipboard">
+                                <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="npi-row">
+                        <div class="npi-label-group">
+                            <span class="npi-label">TrueHDR - Middle Grey</span>
+                            <span class="npi-id">0x10D17E7A</span>
+                        </div>
+                        <div class="npi-val-container">
+                            <span class="npi-val" id="hexGrey">0x00000000</span>
+                            <button class="copy-btn" onclick="copyVal('hexGrey', this)" title="Copy to clipboard">
+                                <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="npi-row">
+                        <div class="npi-label-group">
+                            <span class="npi-label">TrueHDR - Contrast</span>
+                            <span class="npi-id">0x10D17E7B</span>
+                        </div>
+                        <div class="npi-val-container">
+                            <span class="npi-val" id="hexContrast">0x00000000</span>
+                            <button class="copy-btn" onclick="copyVal('hexContrast', this)" title="Copy to clipboard">
+                                <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="npi-row">
+                        <div class="npi-label-group">
+                            <span class="npi-label">TrueHDR - Saturation</span>
+                            <span class="npi-id">0x10D17E7C</span>
+                        </div>
+                        <div class="npi-val-container">
+                            <span class="npi-val" id="hexSaturation">0xFFFFFFE7</span>
+                            <button class="copy-btn" onclick="copyVal('hexSaturation', this)" title="Copy to clipboard">
+                                <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
         <div class="card">
             <div class="section-title">Windows 11 Setup Tips</div>
             <ul class="tips-list">
-                <li><strong>Disable Auto HDR:</strong> Prevent double-tone-mapping by turning this off.<br>
+                <li><strong>Disable Auto HDR:</strong> Prevent double-tone-mapping.<br>
                     <em>Settings > System > Display > HDR > Auto HDR [OFF]</em>
                 </li>
-                <li><strong>Disable ACM:</strong> Ensure "Automatic Color Management" is off to avoid conflict.<br>
+                <li><strong>Disable ACM:</strong> Ensure "Automatic Color Management" is off.<br>
                     <em>Settings > System > Display > Advanced Display > Automatically manage color [OFF]</em>
                 </li>
-                <li><strong>Windows SDR Slider:</strong> This slider does NOT affect RTX HDR brightness. It only affects the desktop/UI background.</li>
-                <li><strong>Apply In-Game:</strong> Use the overlay while the game is running to apply these values.<br>
+                <li><strong>Apply In-Game:</strong> Use the overlay while the game is running.<br>
                     <em>Press <code>Alt+Z</code> > Game Filter > RTX HDR</em>
                 </li>
             </ul>
+        </div>
+
+        <div class="sources">
+            <strong>Sources:</strong>
+            <a href="https://www.reddit.com/r/nvidia/comments/1b03yfg/rtx_hdr_paper_white_gamma_reference_settings/" target="_blank" rel="noopener noreferrer">RTX HDR Paper White &amp; Gamma Reference Settings</a>
+            (u/defet_, r/nvidia) ·
+            <a href="https://www.itu.int/dms_pub/itu-r/opb/rep/R-REP-BT.2408-8-2024-PDF-E.pdf" target="_blank" rel="noopener noreferrer">ITU-R BT.2408-8 (PDF)</a>
+            ·
+            <a href="https://www.itu.int/dms_pubrec/itu-r/rec/bt/R-REC-BT.2100-3-202502-I!!PDF-E.pdf" target="_blank" rel="noopener noreferrer">ITU-R BT.2100-3 (PDF)</a>
         </div>
 
         <div class="disclaimer">
             <strong>Disclaimer:</strong> This is an open-source, fan-made project.<br>
             "NVIDIA", "GeForce", "RTX", and the NVIDIA logo are trademarks and/or registered trademarks of NVIDIA Corporation.<br>
             This tool is not endorsed by or affiliated with NVIDIA Corporation.<br>
-            Calculations are based on ITU-R BT.2408-8 (11/2024) standards.<br>
-            <span class="version-tag">v1.0.0</span>
+            <span class="version-tag">v1.4.2 (Standards Documentation)</span>
         </div>
     </div>
 
     <script>
+        const HLG_75_PERCENT_LINEAR = 0.26496256;
+
+        // ICONS
+        const ICON_COPY = '<svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>';
+        const ICON_CHECK = '<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+
         function toggleNote() {
             const mode = document.getElementById('calcMode').value;
-            const note = document.getElementById('uncappedNote');
-            note.style.display = (mode === 'uncapped') ? 'block' : 'none';
+            document.getElementById('refNote').style.display = (mode === 'reference') ? 'block' : 'none';
+            document.getElementById('hlgNote').style.display = (mode === 'hlg') ? 'block' : 'none';
             calculateSettings();
+        }
+
+        // Helper to convert number to 32-bit hex string
+        function toHex(num) {
+            const unsigned = num >>> 0; 
+            return "0x" + unsigned.toString(16).toUpperCase().padStart(8, '0');
+        }
+
+        async function copyVal(elementId, btnElement) {
+            const text = document.getElementById(elementId).innerText;
+            
+            // Try standard API first, fallback for older/local contexts
+            try {
+                if (navigator.clipboard && window.isSecureContext) {
+                    await navigator.clipboard.writeText(text);
+                } else {
+                    // Fallback for non-secure context (e.g. file://)
+                    const textArea = document.createElement("textarea");
+                    textArea.value = text;
+                    textArea.style.position = "fixed";
+                    textArea.style.left = "-9999px";
+                    document.body.appendChild(textArea);
+                    textArea.focus();
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                }
+                
+                // Visual feedback
+                btnElement.innerHTML = ICON_CHECK;
+                btnElement.style.color = "#76b900"; // Green
+                
+                setTimeout(() => {
+                    btnElement.innerHTML = ICON_COPY;
+                    btnElement.style.color = ""; // Revert to CSS default
+                }, 2000);
+                
+            } catch (err) {
+                console.error('Failed to copy', err);
+                alert("Failed to copy to clipboard");
+            }
         }
 
         function calculateSettings() {
             const peakBrightness = parseFloat(document.getElementById('peakBrightness').value);
-            const gamma = parseFloat(document.getElementById('gammaCurve').value);
+            const gammaTarget = parseFloat(document.getElementById('gammaCurve').value);
             const mode = document.getElementById('calcMode').value;
 
             if (isNaN(peakBrightness) || peakBrightness <= 0) {
-                document.getElementById('outPeak').innerText = "--";
-                document.getElementById('outMidGrey').innerText = "--";
-                document.getElementById('outContrast').innerText = "--";
-                document.getElementById('outSaturation').innerText = "-25 %";
                 document.getElementById('resultsArea').classList.remove('active');
                 return;
             }
 
-            // Logic: ITU BT.2408 Standard
             let paperWhite;
-            
-            if (mode === 'reference') {
+            let methodText;
+
+            if (mode === 'hlg') {
+                const systemGamma = 1.2 + 0.42 * Math.log10(peakBrightness / 1000);
+                paperWhite = peakBrightness * Math.pow(HLG_75_PERCENT_LINEAR, systemGamma);
+                methodText = "Derived from 75% HLG Signal";
+            } else {
+                methodText = "Derived from BT.2408 Standard";
                 if (peakBrightness >= 1000) {
                     paperWhite = 203;
                 } else if (peakBrightness <= 400) {
@@ -352,41 +568,44 @@
                     const slope = (203 - 100) / (1000 - 400); 
                     paperWhite = 100 + ((peakBrightness - 400) * slope);
                 }
-            } else {
-                const slope = (203 - 100) / (1000 - 400); 
-                if (peakBrightness <= 400) {
-                    paperWhite = 100;
-                } else {
-                    paperWhite = 100 + ((peakBrightness - 400) * slope);
-                }
             }
 
-            const middleGrey = paperWhite * Math.pow(0.5, gamma);
+            const middleGrey = paperWhite * Math.pow(0.5, gammaTarget);
             
             let contrast = 25; 
-            if (gamma === 2.0) contrast = 0;
-            if (gamma === 2.2) contrast = 25;
-            if (gamma === 2.4) contrast = 50;
+            if (gammaTarget === 2.0) contrast = 0;
+            if (gammaTarget === 2.2) contrast = 25;
+            if (gammaTarget === 2.4) contrast = 50;
 
             const saturation = -25;
+            const finalPeak = Math.round(peakBrightness);
+            const finalGrey = Math.round(middleGrey);
 
-            document.getElementById('outPeak').innerText = peakBrightness + " nits";
-            document.getElementById('outMidGrey').innerText = Math.round(middleGrey); 
+            // Update UI - Overlay Values
+            document.getElementById('outPeak').innerText = finalPeak + " nits";
+            document.getElementById('outMidGrey').innerText = finalGrey; 
+            document.getElementById('lblMethod').innerText = methodText;
             document.getElementById('outContrast').innerText = contrast + " %";
             document.getElementById('outSaturation').innerText = saturation + " %";
+
+            // Update UI - NPI Hex Values
+            document.getElementById('hexPeak').innerText = toHex(finalPeak);
+            document.getElementById('hexGrey').innerText = toHex(finalGrey);
+            document.getElementById('hexContrast').innerText = toHex(contrast);
+            document.getElementById('hexSaturation').innerText = toHex(saturation);
             
             document.getElementById('resultsArea').classList.add('active');
         }
 
         document.addEventListener('DOMContentLoaded', () => {
             const peakInput = document.getElementById('peakBrightness');
-            const modeSelect = document.getElementById('calcMode');
             const gammaSelect = document.getElementById('gammaCurve');
+            const modeSelect = document.getElementById('calcMode');
 
             peakInput.addEventListener('input', calculateSettings);
-            modeSelect.addEventListener('change', calculateSettings);
             gammaSelect.addEventListener('change', calculateSettings);
-
+            modeSelect.addEventListener('change', calculateSettings);
+            
             calculateSettings();
         });
     </script>
