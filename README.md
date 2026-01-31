@@ -4,6 +4,7 @@ A simple, open-source web tool to calculate the optimal **Middle Grey** (Paper W
 
 **Live Demo:** *(Not published yet)*  
 **GitHub Repository:** [Wootehfook/unofficial-rtx-hdr-calculator](https://github.com/Wootehfook/unofficial-rtx-hdr-calculator)
+**Live Demo** https://wootehfook.github.io/unofficial-rtx-hdr-calculator/
 
 ## 🎯 Purpose
 
