@@ -2,6 +2,14 @@
 
 All notable changes to the **Unofficial RTX HDR Calculator** project will be documented in this file.
 
+## [v1.5.1] - 2026-02-01
+### Added
+- **NPI Offset Clarification:** Added a prominent note in the Profile Inspector section explaining that Contrast values already include the +100 offset and should be used directly without additional adjustment.
+
+## [v1.5.0] - 2026-01-31
+### Fixed
+- **NPI Contrast Offset:** Corrected Profile Inspector hex output for Contrast setting to account for the +100 offset base that NPI uses internally (e.g., 25% overlay contrast = 125 in NPI). This ensures values copied from the calculator are accurate when pasted directly into NVIDIA Profile Inspector.
+
 ## [v1.4.3] - 2026-01-31
 ### Added
 - **Support Link:** Added a Ko-fi “Buy me a coffee” link in the footer and README for optional support.

@@ -410,11 +410,14 @@
                         <span>Profile Inspector (HEX)</span>
                         <span style="font-size: 10px; font-weight: normal; opacity: 0.6;">32-BIT UNSIGNED</span>
                     </div>
+                    <div style="font-size: 11px; color: #999; margin-bottom: 12px; padding: 8px; background: rgba(118, 185, 0, 0.08); border-radius: 4px; border-left: 2px solid #76b900;">
+                        <strong style="color: #76b900;">Note:</strong> Contrast values below include the +100 offset required by NPI. Use these values directly without additional adjustment.
+                    </div>
                     
                     <div class="npi-row">
                         <div class="npi-label-group">
                             <span class="npi-label">TrueHDR - Peak Brightness</span>
-                            <span class="npi-id">0x10D17E79</span>
+                            <span class="npi-id">0x00DD48FC</span>
                         </div>
                         <div class="npi-val-container">
                             <span class="npi-val" id="hexPeak">0x00000000</span>
@@ -426,7 +429,7 @@
                     <div class="npi-row">
                         <div class="npi-label-group">
                             <span class="npi-label">TrueHDR - Middle Grey</span>
-                            <span class="npi-id">0x10D17E7A</span>
+                            <span class="npi-id">0x00DD48FD</span>
                         </div>
                         <div class="npi-val-container">
                             <span class="npi-val" id="hexGrey">0x00000000</span>
@@ -438,7 +441,7 @@
                     <div class="npi-row">
                         <div class="npi-label-group">
                             <span class="npi-label">TrueHDR - Contrast</span>
-                            <span class="npi-id">0x10D17E7B</span>
+                            <span class="npi-id">0x00DD48FE</span>
                         </div>
                         <div class="npi-val-container">
                             <span class="npi-val" id="hexContrast">0x00000000</span>
@@ -450,7 +453,7 @@
                     <div class="npi-row">
                         <div class="npi-label-group">
                             <span class="npi-label">TrueHDR - Saturation</span>
-                            <span class="npi-id">0x10D17E7C</span>
+                            <span class="npi-id">0x00DD48FF</span>
                         </div>
                         <div class="npi-val-container">
                             <span class="npi-val" id="hexSaturation">0xFFFFFFE7</span>
@@ -497,7 +500,7 @@
             <strong>Disclaimer:</strong> This is an open-source, fan-made project.<br>
             "NVIDIA", "GeForce", "RTX", and the NVIDIA logo are trademarks and/or registered trademarks of NVIDIA Corporation.<br>
             This tool is not endorsed by or affiliated with NVIDIA Corporation.<br>
-            <span class="version-tag">v1.4.3 (Footer Updates)</span>
+            <span class="version-tag">v1.5.1 (NPI Offset Clarification)</span>
         </div>
     </div>
 
@@ -606,7 +609,10 @@
             // Update UI - NPI Hex Values
             document.getElementById('hexPeak').innerText = toHex(finalPeak);
             document.getElementById('hexGrey').innerText = toHex(finalGrey);
-            document.getElementById('hexContrast').innerText = toHex(contrast);
+            
+            // FIX: NPI uses a 100-point offset base. (e.g. 50% contrast = 150)
+            document.getElementById('hexContrast').innerText = toHex(contrast + 100);
+            
             document.getElementById('hexSaturation').innerText = toHex(saturation);
             
             document.getElementById('resultsArea').classList.add('active');
