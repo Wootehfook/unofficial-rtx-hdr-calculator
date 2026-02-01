@@ -33,7 +33,7 @@ NVIDIA's RTX HDR filter uses specific sliders (Middle Grey, Contrast, Saturation
 
 For users who prefer to configure RTX HDR via NVIDIA Profile Inspector (NPI), the calculator provides pre-converted **32-bit unsigned hexadecimal values**. These values can be copied directly using the clipboard buttons next to each field.
 
-**Important:** The hex values automatically account for NPI's internal +100 offset on the Contrast setting. For example, if the overlay shows 25% contrast, NPI requires a value of 125 (0x0000007D). The calculator handles this conversion automatically—simply copy and paste the displayed hex values.
+**Important:** The hex values automatically account for NPI's internal +100 offset on the Contrast setting. For example, if the overlay shows 25% contrast, NPI requires a value of 125 (0x0000007D). The calculator handles this conversion automatically—**do not apply any additional offset**. Simply copy and paste the displayed hex values as-is.
 
 ## ⚠️ Important: Windows 11 Configuration
 
