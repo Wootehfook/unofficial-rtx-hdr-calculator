@@ -172,6 +172,10 @@
             line-height: 1.4;
         }
 
+        .note-visible {
+            display: block;
+        }
+
         /* NPI CARD STYLING */
         .npi-card {
             background-color: #151515; 
@@ -190,6 +194,12 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+        }
+
+        .npi-meta {
+            font-size: 10px;
+            font-weight: normal;
+            opacity: 0.6;
         }
 
         .npi-row {
@@ -225,6 +235,20 @@
 
         .npi-val { color: #8cd600; }
         .npi-label { color: #aaa; font-weight: 500; }
+
+        .npi-note {
+            font-size: 11px;
+            color: #999;
+            margin-bottom: 12px;
+            padding: 8px;
+            background: rgba(118, 185, 0, 0.08);
+            border-radius: 4px;
+            border-left: 2px solid #76b900;
+        }
+
+        .npi-note strong {
+            color: #76b900;
+        }
 
         /* COPY BUTTON STYLES */
         .copy-btn {
@@ -331,6 +355,111 @@
             margin-top: 8px;
             font-size: 10px;
         }
+
+        /* TOOLTIP STYLES */
+        .label-with-help {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .help-icon {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #333;
+            color: #999;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: help;
+            border: 1px solid #444;
+            transition: all 0.2s;
+        }
+
+        .help-icon:hover {
+            background: #444;
+            color: #fff;
+            border-color: var(--accent-color);
+        }
+
+        .tooltip {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            z-index: 100;
+            background-color: #2a2a2a;
+            border: 1px solid var(--accent-color);
+            border-radius: 6px;
+            padding: 14px;
+            width: 320px;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: calc(100% + 8px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            transition: opacity 0.2s, visibility 0.2s;
+        }
+
+        .tooltip.tooltip-below {
+            bottom: auto;
+            top: calc(100% + 8px);
+        }
+
+        .help-icon:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: var(--accent-color);
+        }
+
+        .tooltip.tooltip-below::after {
+            top: auto;
+            bottom: 100%;
+            border-top-color: transparent;
+            border-bottom-color: var(--accent-color);
+        }
+
+        .tooltip-title {
+            font-weight: bold;
+            color: var(--accent-color);
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .tooltip-content {
+            font-size: 12px;
+            line-height: 1.6;
+            color: #ddd;
+        }
+
+        .tooltip-content ol {
+            margin: 8px 0;
+            padding-left: 18px;
+        }
+
+        .tooltip-content li {
+            margin-bottom: 6px;
+        }
+
+        .tooltip-content code {
+            background: #1a1a1a;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: var(--mono-font);
+            font-size: 11px;
+            color: #8cd600;
+        }
     </style>
 </head>
 <body>
@@ -347,9 +476,27 @@
             <div class="section-title">Display Parameters</div>
 
             <div class="input-group">
-                <label class="input-label" for="peakBrightness">Peak Brightness (nits)</label>
+                <div class="label-with-help">
+                    <label class="input-label" for="peakBrightness">Peak Brightness (nits)</label>
+                    <span class="help-icon">
+                        ?
+                        <div class="tooltip">
+                            <div class="tooltip-title">Finding Your True Peak Brightness</div>
+                            <div class="tooltip-content">
+                                <ol>
+                                    <li>Open <strong>Windows HDR Calibration</strong> app from Start menu</li>
+                                    <li>Click <strong>"Calibrate your HDR display"</strong></li>
+                                    <li>Adjust the slider until the HDR sun icon is barely visible</li>
+                                    <li>Note the <strong>nits value</strong> shown at the bottom</li>
+                                    <li>Enter that value here for accurate calibration</li>
+                                </ol>
+                                <em>This measures your display's actual peak luminance, which may differ from manufacturer specs.</em>
+                            </div>
+                        </div>
+                    </span>
+                </div>
                 <div class="input-desc">Enter the maximum brightness of your monitor (e.g., 400, 1000, 2500).</div>
-                <input type="number" id="peakBrightness" placeholder="e.g. 1000" min="100" max="10000">
+                <input type="number" id="peakBrightness" placeholder="e.g. 1000" min="10" max="10000">
             </div>
 
             <div class="input-group">
@@ -360,7 +507,7 @@
                     <option value="hlg">Vivid / Daylight (BT.2100 HLG)</option>
                 </select>
                 
-                <div id="refNote" class="note-box" style="display:block;">
+                <div id="refNote" class="note-box note-visible">
                     <strong>Cinema (Recommended):</strong> Caps Paper White at 203 nits. Best for dim/dark rooms. Keeps text comfortable while maximizing dynamic range.
                 </div>
                 
@@ -408,10 +555,10 @@
                 <div class="npi-card">
                     <div class="npi-header">
                         <span>Profile Inspector (HEX)</span>
-                        <span style="font-size: 10px; font-weight: normal; opacity: 0.6;">32-BIT UNSIGNED</span>
+                        <span class="npi-meta">32-BIT UNSIGNED</span>
                     </div>
-                    <div style="font-size: 11px; color: #999; margin-bottom: 12px; padding: 8px; background: rgba(118, 185, 0, 0.08); border-radius: 4px; border-left: 2px solid #76b900;">
-                        <strong style="color: #76b900;">Note:</strong> Contrast values below include the +100 offset required by NPI. Use these values directly without additional adjustment.
+                        <div class="npi-note">
+                            <strong>Note:</strong> Contrast and Saturation values below include the +100 offset required by NPI. Use these values directly without additional adjustment.
                     </div>
                     
                     <div class="npi-row">
@@ -500,7 +647,7 @@
             <strong>Disclaimer:</strong> This is an open-source, fan-made project.<br>
             "NVIDIA", "GeForce", "RTX", and the NVIDIA logo are trademarks and/or registered trademarks of NVIDIA Corporation.<br>
             This tool is not endorsed by or affiliated with NVIDIA Corporation.<br>
-            <span class="version-tag">v1.5.1 (NPI Offset Clarification)</span>
+            <span class="version-tag">v1.6.0 (NPI Saturation Offset Fix)</span>
         </div>
     </div>
 
@@ -520,8 +667,27 @@
 
         // Helper to convert number to 32-bit hex string
         function toHex(num) {
-            const unsigned = num >>> 0; 
+            const unsigned = num >>> 0;
             return "0x" + unsigned.toString(16).toUpperCase().padStart(8, '0');
+        }
+
+        function clamp(value, min, max) {
+            return Math.min(Math.max(value, min), max);
+        }
+
+        function toNvidiaHex(value, useOffset) {
+            let finalValue = parseInt(value, 10);
+
+            if (Number.isNaN(finalValue)) {
+                finalValue = 0;
+            }
+
+            if (useOffset) {
+                finalValue = clamp(finalValue, -100, 100);
+                finalValue = 100 + finalValue;
+            }
+
+            return toHex(finalValue);
         }
 
         async function copyVal(elementId, btnElement) {
@@ -609,13 +775,41 @@
             // Update UI - NPI Hex Values
             document.getElementById('hexPeak').innerText = toHex(finalPeak);
             document.getElementById('hexGrey').innerText = toHex(finalGrey);
-            
-            // FIX: NPI uses a 100-point offset base. (e.g. 50% contrast = 150)
-            document.getElementById('hexContrast').innerText = toHex(contrast + 100);
-            
-            document.getElementById('hexSaturation').innerText = toHex(saturation);
+
+            // NPI uses a 100-point offset for Contrast and Saturation
+            document.getElementById('hexContrast').innerText = toNvidiaHex(contrast, true);
+            document.getElementById('hexSaturation').innerText = toNvidiaHex(saturation, true);
             
             document.getElementById('resultsArea').classList.add('active');
+        }
+
+        // Dynamic tooltip positioning
+        function adjustTooltipPosition() {
+            const helpIcons = document.querySelectorAll('.help-icon');
+            
+            helpIcons.forEach(icon => {
+                icon.addEventListener('mouseenter', function() {
+                    const tooltip = this.querySelector('.tooltip');
+                    if (!tooltip) return;
+                    
+                    // Get icon position relative to viewport
+                    const iconRect = this.getBoundingClientRect();
+                    
+                    // Estimate tooltip height (approximate based on content)
+                    const tooltipHeight = 200; // Approximate height of tooltip
+                    const buffer = 20; // Extra spacing buffer
+                    
+                    // Check if there's enough space above the icon
+                    const spaceAbove = iconRect.top;
+                    
+                    // Position below if not enough space above
+                    if (spaceAbove < (tooltipHeight + buffer)) {
+                        tooltip.classList.add('tooltip-below');
+                    } else {
+                        tooltip.classList.remove('tooltip-below');
+                    }
+                });
+            });
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -628,6 +822,7 @@
             modeSelect.addEventListener('change', calculateSettings);
             
             calculateSettings();
+            adjustTooltipPosition();
         });
     </script>
 
