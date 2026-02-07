@@ -6,7 +6,7 @@ A simple, open-source web tool to calculate the optimal **Middle Grey** (Paper W
 
 **Support:** [Buy me a coffee](https://ko-fi.com/wtfook)
 
-**Live Demo:** https://wootehfook.github.io/unofficial-rtx-hdr-calculator/
+**Live Demo:** <https://wootehfook.github.io/unofficial-rtx-hdr-calculator/>
 
 ## 🎯 Purpose
 
@@ -33,7 +33,7 @@ NVIDIA's RTX HDR filter uses specific sliders (Middle Grey, Contrast, Saturation
 
 For users who prefer to configure RTX HDR via NVIDIA Profile Inspector (NPI), the calculator provides pre-converted **32-bit unsigned hexadecimal values**. These values can be copied directly using the clipboard buttons next to each field.
 
-**Important:** The hex values automatically account for NPI's internal +100 offset on the Contrast setting. For example, if the overlay shows 25% contrast, NPI requires a value of 125 (0x0000007D). The calculator handles this conversion automatically—**do not apply any additional offset**. Simply copy and paste the displayed hex values as-is.
+**Important:** The hex values automatically account for NPI's internal +100 offset on the Contrast and Saturation settings. For example, if the overlay shows 25% contrast, NPI requires a value of 125 (0x0000007D). If Saturation is -25, NPI requires 75 (0x0000004B). The calculator handles these conversions automatically—**do not apply any additional offset**. Simply copy and paste the displayed hex values as-is.
 
 ## ⚠️ Important: Windows 11 Configuration
 
@@ -48,7 +48,7 @@ To ensure RTX HDR works correctly without a "washed out" look, you must prevent 
 This project is based on community research and established standards. Sources are linked below for transparency and verification.
 
 * **Community Research:** [RTX HDR Paper White & Gamma Reference Settings](https://www.reddit.com/r/nvidia/comments/1b03yfg/rtx_hdr_paper_white_gamma_reference_settings/) by **u/defet_** (r/nvidia).
-* **Standards:** 
+* **Standards:**
   * [Report ITU-R BT.2408-8 (11/2024): Guidance for operational practices in HDR television production](https://www.itu.int/dms_pub/itu-r/opb/rep/R-REP-BT.2408-8-2024-PDF-E.pdf) — Determines the "Reference" Paper White level (203 nits) and interpolation logic for lower brightness displays (Cinema mode).
   * [Recommendation ITU-R BT.2100-3 (02/2025): Image parameter values for high dynamic range television for use in production and international programme exchange](https://www.itu.int/dms_pubrec/itu-r/rec/bt/R-REC-BT.2100-3-202502-I!!PDF-E.pdf) — Contains the HLG System Gamma formula (Table 5, Note 2) which scales brightness based on display peak luminance (Vivid mode). *(Note: If unavailable in your region, the previous standard BT.2100-2 (2018) contains the identical gamma formula.)*
 
